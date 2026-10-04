@@ -1,0 +1,20 @@
+# Copy this file to the ml-brain server as  ~/st127304-a3/docker-compose.yaml   (one time)
+# Replace the three CHECK values with the SAME values that worked for your Assignment 2 deployment.
+services:
+  web:
+    image: arpanoj/a3-car-price:latest
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web-st127304-a3.rule=Host(`web-st127304-a3.ml.brain.cs.ait.ac.th`)"
+      - "traefik.http.routers.web-st127304-a3.entrypoints=websecure"          # CHECK (same as A2)
+      - "traefik.http.routers.web-st127304-a3.tls=true"
+      - "traefik.http.routers.web-st127304-a3.tls.certresolver=letsencrypt"   # CHECK (same as A2)
+      - "traefik.http.services.web-st127304-a3.loadbalancer.server.port=8050"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    name: TRAEFIK_NETWORK_NAME                                               # CHECK (same as A2)
+    external: true

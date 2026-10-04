@@ -1,0 +1,53 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # ---------------- CI: run the unit tests on every push ----------------
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4              # download the repository
+      - uses: actions/setup-python@v5          # install Python 3.11
+        with:
+          python-version: "3.11"
+      - run: pip install -r app/requirements.txt pytest
+      - run: pytest -v                         # the 2 unit tests
+
+  # ---------------- CD: only runs if the tests above passed ----------------
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1) build the Docker image and push it to Docker Hub (arpanoj)
+      - uses: docker/login-action@v3
+        with:
+          username: arpanoj
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: arpanoj/a3-car-price:latest
+
+      # 2) log in to ml-brain (through the jump host bazooka) and restart the container with the new image
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 192.41.170.25
+          username: st127304
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}       # delete this line if your key has no passphrase
+          proxy_host: bazooka.cs.ait.ac.th
+          proxy_username: st127304
+          proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          proxy_passphrase: ${{ secrets.SSH_PASSPHRASE }} # delete this line if your key has no passphrase
+          script: |
+            cd ~/st127304-a3
+            docker compose pull
+            docker compose up -d
