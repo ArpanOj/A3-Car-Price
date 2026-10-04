@@ -1,5 +1,3 @@
-# Copy this file to the ml-brain server as  ~/st127304-a3/docker-compose.yaml   (one time)
-# Replace the three CHECK values with the SAME values that worked for your Assignment 2 deployment.
 services:
   web:
     image: arpanoj/a3-car-price:latest

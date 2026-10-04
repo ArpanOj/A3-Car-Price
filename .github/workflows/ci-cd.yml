@@ -3,47 +3,47 @@ name: CI-CD
 on:
   push:
     branches: [main]
-  pull_request:
 
 jobs:
-  # ---------------- CI: run the unit tests on every push ----------------
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4              # download the repository
-      - uses: actions/setup-python@v5          # install Python 3.11
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r app/requirements.txt pytest
-      - run: pytest -v                         # the 2 unit tests
+      - name: Install dependencies
+        run: pip install -r app/requirements.txt pytest
+      - name: Run unit tests
+        run: pytest -v
 
-  # ---------------- CD: only runs if the tests above passed ----------------
-  deploy:
+  build-and-push:
     needs: test
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # 1) build the Docker image and push it to Docker Hub (arpanoj)
       - uses: docker/login-action@v3
         with:
-          username: arpanoj
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: arpanoj/a3-car-price:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/a3-car-price:latest
 
-      # 2) log in to ml-brain (through the jump host bazooka) and restart the container with the new image
-      - uses: appleboy/ssh-action@v1.0.3
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull and restart on ml-brain
+        uses: appleboy/ssh-action@v1
         with:
-          host: 192.41.170.25
-          username: st127304
+          host: ml.brain.cs.ait.ac.th
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          proxy_host: bazooka.cs.ait.ac.th
-          proxy_username: st127304
+          proxy_host: ${{ secrets.JUMP_HOST }}
+          proxy_username: ${{ secrets.SSH_USERNAME }}
           proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/st127304-a3
