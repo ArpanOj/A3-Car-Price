@@ -1,7 +1,7 @@
 # A3 - Predicting Car Price (Classification, MLflow, CI/CD)
 
-AT82.03 Machine Learning - Assignment 3  
-Student: **<YOUR NAME> (st127304)**
+Assignment 3  
+Student: **<Arpan Ojha> (st127304)**
 
 ## What this project does
 Predicts which **price class (0-3)** a used car falls into, using a multinomial logistic regression written from scratch
@@ -65,5 +65,4 @@ docker build -t arpanoj/a3-car-price:latest . && docker run -p 8050:8050 arpanoj
 ```
 Tests: `pip install pytest && pytest -v` &nbsp;|&nbsp; MLflow page: `mlflow ui --backend-store-uri sqlite:///mlflow.db`
 
-### Live app
-<https://web-st127304-a3.ml.brain.cs.ait.ac.th>
+

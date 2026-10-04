@@ -7,14 +7,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web-st127304-a3.rule=Host(`web-st127304-a3.ml.brain.cs.ait.ac.th`)"
-      - "traefik.http.routers.web-st127304-a3.entrypoints=websecure"          # CHECK (same as A2)
+      - "traefik.http.routers.web-st127304-a3.entrypoints=websecure"          
       - "traefik.http.routers.web-st127304-a3.tls=true"
-      - "traefik.http.routers.web-st127304-a3.tls.certresolver=letsencrypt"   # CHECK (same as A2)
+      - "traefik.http.routers.web-st127304-a3.tls.certresolver=letsencrypt"   
       - "traefik.http.services.web-st127304-a3.loadbalancer.server.port=8050"
     networks:
       - traefik
 
 networks:
   traefik:
-    name: TRAEFIK_NETWORK_NAME                                               # CHECK (same as A2)
+    name: web                                               
     external: true
