@@ -42,11 +42,9 @@ jobs:
           host: 192.41.170.25
           username: st127304
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}       # delete this line if your key has no passphrase
           proxy_host: bazooka.cs.ait.ac.th
           proxy_username: st127304
           proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          proxy_passphrase: ${{ secrets.SSH_PASSPHRASE }} # delete this line if your key has no passphrase
           script: |
             cd ~/st127304-a3
             docker compose pull
