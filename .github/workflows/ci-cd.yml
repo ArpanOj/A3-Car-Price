@@ -47,12 +47,11 @@ jobs:
           host: ml.brain.cs.ait.ac.th
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-
           proxy_host: ${{ secrets.JUMP_HOST }}
           proxy_username: ${{ secrets.SSH_USERNAME }}
-          proxy_password: ${{ secrets.JUMP_PASSWORD }}
-
+          proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/st127304-a3
             docker compose pull
             docker compose up -d
+
