@@ -37,13 +37,13 @@ were added to the `LogisticRegression` class and checked against `sklearn.metric
 *Support* = the number of true samples of each class.
 
 ## Task 2 - Ridge logistic regression
-`use_penalty` / `lambda_` add `lambda * sum(W^2)` to the loss (intercept excluded). Results: <PASTE 2-3 SENTENCES>.
+`use_penalty` / `lambda_` add `lambda * sum(W^2)` to the loss (intercept excluded). Results: .
 
 ## Task 3 - MLflow, deployment, CI/CD
 Per the TA's announcement, MLflow is run **locally** (`sqlite:///mlflow.db`) and screenshots are provided.
 
 * **Experiment:** `st127304-a3` - 4 runs (no penalty + Ridge 0.0001 / 0.001 / 0.01); dataset not logged; model saved with every run.
-* **Registered model:** `st127304-a3-model` (alias `staging`) - best run: `<RUN NAME>`, macro F1 = `<VALUE>`
+* **Registered model:** `st127304-a3-model` (alias `staging`) - 
 * **Unit tests:** `pytest` - (1) the model takes the expected input, (2) the output has the expected shape
 * **CI/CD:** every push runs the tests; if they pass, the image is built, pushed to Docker Hub and deployed to the ml-brain server
 
